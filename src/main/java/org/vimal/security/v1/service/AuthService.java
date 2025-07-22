@@ -10,6 +10,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.vimal.security.v1.converter.AuthAppSecretConverter;
 import org.vimal.security.v1.converter.StateToken2EncrypterDecrypter;
 import org.vimal.security.v1.converter.StateTokenEncrypterDecrypter;
 import org.vimal.security.v1.exception.BadRequestExc;
@@ -40,6 +41,7 @@ public class AuthService {
     private final TempTokenService tempTokenService;
     private final StateTokenEncrypterDecrypter stateTokenEncrypterDecrypter;
     private final StateToken2EncrypterDecrypter stateToken2EncrypterDecrypter;
+    private final AuthAppSecretConverter authAppSecretConverter;
     private final UserModelRepo userModelRepo;
     private final MailService mailService;
     private final EmailMfaService emailMfaService;
@@ -243,7 +245,7 @@ public class AuthService {
             throw new BadRequestExc("Authenticator App Mfa is not enabled");
         if (user.isAccountLocked() && user.getLastLockedAt().plus(1, ChronoUnit.DAYS).isAfter(Instant.now()))
             throw new LockedException("Account is locked due to too many failed mfa attempts. Please try again later");
-        if (!TOTPUtil.verifyOTP(user.getAuthAppSecret(), totp)) {
+        if (!TOTPUtil.verifyOTP(authAppSecretConverter.convertToEntityAttribute(user.getAuthAppSecret()), totp)) {
             handleFailedMfaAttempt(user);
             throw new BadRequestExc("Invalid TOTP");
         }

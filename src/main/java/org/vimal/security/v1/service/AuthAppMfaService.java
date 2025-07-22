@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.vimal.security.v1.converter.AuthAppMfaSecret2EncrypterDecrypter;
 import org.vimal.security.v1.converter.AuthAppMfaSecretEncrypterDecrypter;
+import org.vimal.security.v1.converter.AuthAppSecretConverter;
 import org.vimal.security.v1.exception.BadRequestExc;
 import org.vimal.security.v1.model.UserModel;
 import org.vimal.security.v1.repo.UserModelRepo;
@@ -33,6 +34,7 @@ public class AuthAppMfaService {
     private final UserModelRepo userModelRepo;
     private final AuthAppMfaSecretEncrypterDecrypter authAppMfaSecretEncrypterDecrypter;
     private final AuthAppMfaSecret2EncrypterDecrypter authAppMfaSecret2EncrypterDecrypter;
+    private final AuthAppSecretConverter authAppSecretConverter;
     private final JwtUtil jwtUtil;
 
     public byte[] generateQRCodeForAuthApp() throws NoSuchAlgorithmException, IOException, WriterException {
@@ -80,7 +82,7 @@ public class AuthAppMfaService {
         var decryptedStoredSecret = authAppMfaSecret2EncrypterDecrypter.convertToEntityAttribute(storedSecret);
         if (TOTPUtil.verifyOTP(decryptedStoredSecret, totp)) {
             user.enableMfaMethod(UserModel.MfaType.AUTHENTICATOR_APP);
-            user.setAuthAppSecret(decryptedStoredSecret);
+            user.setAuthAppSecret(authAppSecretConverter.convertToDatabaseColumn(decryptedStoredSecret));
             user.setUpdatedBy("Self auth app setup");
             userModelRepo.save(user);
             try {
