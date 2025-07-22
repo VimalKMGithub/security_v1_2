@@ -1,12 +1,9 @@
 package org.vimal.security.v1.util.aes;
 
 public enum AESOperationType {
-    EMAIL,
-    REAL_EMAIL,
     EMAIL_VERIFICATION_TOKEN,
     EMAIL_VERIFICATION_TOKEN_2,
     JWT_ID,
-    USERNAME,
     JWT_ID_2,
     REFRESH_TOKEN,
     REFRESH_TOKEN_2,
@@ -17,7 +14,6 @@ public enum AESOperationType {
     AUTH_APP_SECRET,
     STATE_TOKEN,
     STATE_TOKEN_2,
-    PASSWORD_SECRET,
     EMAIL_OTP_FORGOT_PWD,
     EMAIL_OTP_FORGOT_PWD_2,
     EMAIL_OTP_EMAIL_CHANGE,
@@ -26,6 +22,4 @@ public enum AESOperationType {
     EMAIL_STORE_EMAIL_CHANGE_2,
     EMAIL_OTP_DELETE_ACCOUNT,
     EMAIL_OTP_DELETE_ACCOUNT_2,
-    CREATED_BY,
-    UPDATED_BY,
 }
