@@ -14,12 +14,9 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 @RequiredArgsConstructor
 public class AESUtilFactory {
-    private final EmailAESKeyProvider emailAESKeyConfig;
-    private final RealEmailAESKeyProvider realEmailAESKeyConfig;
     private final EmailVerificationTokenAESProvider emailVerificationTokenAESKeyConfig;
     private final EmailVerificationToken2AESProvider emailVerificationToken2AESKeyConfig;
     private final JwtIdAESProvider jwtIdAESKeyConfig;
-    private final UsernameAESProvider usernameAESKeyConfig;
     private final JwtId2AESProvider jwtId2AESKeyConfig;
     private final RefreshTokenAESProvider refreshTokenAESKeyConfig;
     private final RefreshToken2AESProvider refreshToken2AESKeyConfig;
@@ -30,7 +27,6 @@ public class AESUtilFactory {
     private final AuthAppSecretAESProvider authAppSecretAESKeyConfig;
     private final StateTokenAESProvider stateTokenAESKeyConfig;
     private final StateToken2AESProvider stateToken2AESKeyConfig;
-    private final PasswordAESProvider passwordAESKeyConfig;
     private final EmailOtpForgotPwdAESProvider emailOtpForgotPwdAESKeyConfig;
     private final EmailOtpForgotPwd2AESProvider emailOtpForgotPwd2AESKeyConfig;
     private final EmailOtpEmailChangeAESProvider emailOtpEmailChangeAESKeyConfig;
@@ -39,8 +35,6 @@ public class AESUtilFactory {
     private final EmailStoreEmailChange2AESProvider emailStoreEmailChange2AESKeyConfig;
     private final EmailOtpToDeleteAccountAESProvider emailOtpToDeleteAccountAESKeyConfig;
     private final EmailOtpToDeleteAccount2AESProvider emailOtpToDeleteAccount2AESKeyConfig;
-    private final CreatedByAESProvider createdByAESKeyConfig;
-    private final UpdatedByAESProvider updatedByAESKeyConfig;
 
     private final Map<AESOperationType, AESInterface> cache = new ConcurrentHashMap<>();
 
@@ -50,12 +44,9 @@ public class AESUtilFactory {
 
     private AESInterface createUtil(AESOperationType type) {
         return switch (type) {
-            case EMAIL -> new DeterministicAESUtil(emailAESKeyConfig);
-            case REAL_EMAIL -> new DeterministicAESUtil(realEmailAESKeyConfig);
             case EMAIL_VERIFICATION_TOKEN -> new DeterministicAESUtil(emailVerificationTokenAESKeyConfig);
             case EMAIL_VERIFICATION_TOKEN_2 -> new RandomAESUtil(emailVerificationToken2AESKeyConfig);
             case JWT_ID -> new DeterministicAESUtil(jwtIdAESKeyConfig);
-            case USERNAME -> new DeterministicAESUtil(usernameAESKeyConfig);
             case JWT_ID_2 -> new RandomAESUtil(jwtId2AESKeyConfig);
             case REFRESH_TOKEN -> new DeterministicAESUtil(refreshTokenAESKeyConfig);
             case REFRESH_TOKEN_2 -> new RandomAESUtil(refreshToken2AESKeyConfig);
@@ -66,7 +57,6 @@ public class AESUtilFactory {
             case AUTH_APP_SECRET -> new RandomAESUtil(authAppSecretAESKeyConfig);
             case STATE_TOKEN -> new DeterministicAESUtil(stateTokenAESKeyConfig);
             case STATE_TOKEN_2 -> new RandomAESUtil(stateToken2AESKeyConfig);
-            case PASSWORD_SECRET -> new RandomAESUtil(passwordAESKeyConfig);
             case EMAIL_OTP_FORGOT_PWD -> new DeterministicAESUtil(emailOtpForgotPwdAESKeyConfig);
             case EMAIL_OTP_FORGOT_PWD_2 -> new RandomAESUtil(emailOtpForgotPwd2AESKeyConfig);
             case EMAIL_OTP_EMAIL_CHANGE -> new DeterministicAESUtil(emailOtpEmailChangeAESKeyConfig);
@@ -75,8 +65,6 @@ public class AESUtilFactory {
             case EMAIL_STORE_EMAIL_CHANGE_2 -> new RandomAESUtil(emailStoreEmailChange2AESKeyConfig);
             case EMAIL_OTP_DELETE_ACCOUNT -> new DeterministicAESUtil(emailOtpToDeleteAccountAESKeyConfig);
             case EMAIL_OTP_DELETE_ACCOUNT_2 -> new RandomAESUtil(emailOtpToDeleteAccount2AESKeyConfig);
-            case CREATED_BY -> new RandomAESUtil(createdByAESKeyConfig);
-            case UPDATED_BY -> new RandomAESUtil(updatedByAESKeyConfig);
         };
     }
 }
