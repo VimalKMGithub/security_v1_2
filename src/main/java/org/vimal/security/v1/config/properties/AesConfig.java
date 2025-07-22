@@ -8,9 +8,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Getter
 @Setter
 public class AesConfig {
-//    private String email;
-//    private String realEmail;
-//    private String username;
     private String emailVerificationToken;
     private String emailVerificationToken2;
     private String jwtId;
@@ -24,7 +21,6 @@ public class AesConfig {
     private String authAppSecret;
     private String stateToken;
     private String stateToken2;
-//    private String password;
     private String forEmailOtpForgotPwd;
     private String forEmailOtpForgotPwd2;
     private String forEmailOtpEmailChange;
@@ -33,6 +29,4 @@ public class AesConfig {
     private String forEmailStoreEmailChange2;
     private String forEmailOtpDeleteAccount;
     private String forEmailOtpDeleteAccount2;
-//    private String createdBy;
-//    private String updatedBy;
 }
