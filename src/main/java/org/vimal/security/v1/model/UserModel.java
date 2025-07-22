@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.vimal.security.v1.converter.*;
 
 import java.time.Instant;
 import java.util.HashSet;
@@ -46,21 +45,17 @@ public class UserModel {
     @Column(name = "last_name", length = 50)
     private String lastName;
 
-    @Convert(converter = UsernameConverter.class)
     @Column(name = "username", nullable = false, length = 512)
     private String username;
 
     @JsonIgnore
-    @Convert(converter = PasswordConverter.class)
     @Column(name = "password", nullable = false, length = 512)
     private String password;
 
-    @Convert(converter = EmailConverter.class)
     @Column(name = "email", nullable = false, length = 512)
     private String email;
 
     @JsonIgnore
-    @Convert(converter = RealEmailConverter.class)
     @Column(name = "real_email", length = 512, unique = true)
     private String realEmail;
 
@@ -108,7 +103,6 @@ public class UserModel {
     private Instant updatedAt;
 
     @JsonIgnore
-    @Convert(converter = AuthAppSecretConverter.class)
     @Column(name = "auth_app_secret", length = 512)
     private String authAppSecret;
 
@@ -116,11 +110,9 @@ public class UserModel {
     private Instant lastLockedAt;
 
     @Column(name = "created_by", nullable = false, updatable = false, length = 512)
-    @Convert(converter = CreatedByConverter.class)
     private String createdBy;
 
     @Column(name = "updated_by", nullable = false, length = 512)
-    @Convert(converter = UpdatedByConverter.class)
     private String updatedBy;
 
     @PrePersist

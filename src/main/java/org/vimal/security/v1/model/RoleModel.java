@@ -5,8 +5,6 @@ import lombok.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.NaturalId;
-import org.vimal.security.v1.converter.CreatedByConverter;
-import org.vimal.security.v1.converter.UpdatedByConverter;
 
 import java.time.Instant;
 import java.util.HashSet;
@@ -52,11 +50,9 @@ public class RoleModel {
     private Instant updatedAt;
 
     @Column(name = "created_by", nullable = false, updatable = false, length = 512)
-    @Convert(converter = CreatedByConverter.class)
     private String createdBy;
 
     @Column(name = "updated_by", nullable = false, length = 512)
-    @Convert(converter = UpdatedByConverter.class)
     private String updatedBy;
 
     @PrePersist
