@@ -59,7 +59,7 @@ public class UserSelfService {
         if (userModelRepo.existsByUsername(registrationDto.getUsername()))
             throw new BadRequestExc("Username: '" + registrationDto.getUsername() + "' already taken");
         var realEmail = RealEmailSanitizerUtil.sanitizeRealEmail(registrationDto.getEmail());
-        if (userModelRepo.existsByRealEmail(realEmail))
+        if (userModelRepo.existsByRealEmail(realEmail) || userModelRepo.existsByEmail(registrationDto.getEmail()))
             throw new BadRequestExc("Email: '" + registrationDto.getEmail() + "' already taken");
         var user = createUserFromRegistration(registrationDto, realEmail);
         var verificationToken = generateAndStoreEmailVerificationToken(user);

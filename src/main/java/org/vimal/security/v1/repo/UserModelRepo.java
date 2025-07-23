@@ -18,6 +18,8 @@ public interface UserModelRepo extends JpaRepository<UserModel, UUID> {
 
     boolean existsByRealEmail(String realEmail);
 
+    boolean existsByEmail(String email);
+
     Optional<UserModel> findByEmail(String storedEmail);
 
     List<UserModel> findByUsernameIn(Collection<String> usernames);
