@@ -14,9 +14,7 @@ import org.vimal.security.v1.dto.UserUpdationDto;
 import org.vimal.security.v1.exception.BadRequestExc;
 import org.vimal.security.v1.service.AdminUserService;
 
-import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,7 +31,6 @@ public class AdminUserController {
     @PostMapping("/create-users")
     @PreAuthorize("@authz.isAdminOrAbove() or @authz.canCreateUsers()")
     public ResponseEntity<?> createUsers(@RequestBody Set<UserCreationDto> request) {
-        request = request.stream().filter(Objects::nonNull).collect(Collectors.toSet());
         if (request.isEmpty()) throw new BadRequestExc("No valid requests provided");
         else if (request.size() > 100) throw new BadRequestExc("Cannot create more than 100 users at a time");
         return adminUserService.createUsers(request);
@@ -60,7 +57,6 @@ public class AdminUserController {
     @DeleteMapping("/delete-users")
     @PreAuthorize("@authz.isAdminOrAbove() or @authz.canDeleteUsers()")
     public ResponseEntity<?> deleteUsers(@RequestBody Set<String> usernamesOrEmails) {
-        usernamesOrEmails = usernamesOrEmails.stream().filter(use -> use != null && !use.isBlank()).collect(Collectors.toSet());
         if (usernamesOrEmails.isEmpty()) throw new BadRequestExc("No valid usernames or emails provided");
         else if (usernamesOrEmails.size() > 100) throw new BadRequestExc("Cannot delete more than 100 users at a time");
         return adminUserService.deleteUsers(usernamesOrEmails);
@@ -87,7 +83,6 @@ public class AdminUserController {
     @GetMapping("/get-users")
     @PreAuthorize("@authz.isAdminOrAbove() or @authz.canReadUsers()")
     public ResponseEntity<?> getUsers(@RequestBody Set<String> usernamesOrEmails) {
-        usernamesOrEmails = usernamesOrEmails.stream().filter(use -> use != null && !use.isBlank()).collect(Collectors.toSet());
         if (usernamesOrEmails.isEmpty()) throw new BadRequestExc("No valid usernames or emails provided");
         else if (usernamesOrEmails.size() > 100) throw new BadRequestExc("Cannot get more than 100 users at a time");
         return adminUserService.getUsers(usernamesOrEmails);
@@ -103,7 +98,6 @@ public class AdminUserController {
     @PutMapping("/update-users")
     @PreAuthorize("@authz.isAdminOrAbove() or @authz.canUpdateUsers()")
     public ResponseEntity<?> updateUsers(@RequestBody Set<UserUpdationDto> request) {
-        request = request.stream().filter(Objects::nonNull).collect(Collectors.toSet());
         if (request.isEmpty()) throw new BadRequestExc("No valid requests provided");
         else if (request.size() > 100) throw new BadRequestExc("Cannot update more than 100 users at a time");
         return adminUserService.updateUsers(request);
@@ -118,7 +112,6 @@ public class AdminUserController {
     @GetMapping("/get-permissions")
     @PreAuthorize("@authz.isAdminOrAbove() or @authz.canReadPermissions()")
     public ResponseEntity<?> getPermissions(@RequestBody Set<String> permissionNames) {
-        permissionNames = permissionNames.stream().filter(p -> p != null && !p.isBlank()).collect(Collectors.toSet());
         if (permissionNames.isEmpty()) throw new BadRequestExc("No valid permission names provided");
         else if (permissionNames.size() > 100)
             throw new BadRequestExc("Cannot get more than 100 permissions at a time");
@@ -134,7 +127,6 @@ public class AdminUserController {
     @PostMapping("/create-roles")
     @PreAuthorize("@authz.isAdminOrAbove() or @authz.canCreateRoles()")
     public ResponseEntity<?> createRoles(@RequestBody Set<RoleCreationDto> roles) {
-        roles = roles.stream().filter(Objects::nonNull).collect(Collectors.toSet());
         if (roles.isEmpty()) throw new BadRequestExc("No valid roles provided");
         else if (roles.size() > 100) throw new BadRequestExc("Cannot create more than 100 roles at a time");
         return adminUserService.createRoles(roles);
@@ -149,7 +141,6 @@ public class AdminUserController {
     @DeleteMapping("/delete-roles")
     @PreAuthorize("@authz.isAdminOrAbove() or @authz.canDeleteRoles()")
     public ResponseEntity<?> deleteRoles(@RequestBody Set<String> roleNames) {
-        roleNames = roleNames.stream().filter(r -> r != null && !r.isBlank()).collect(Collectors.toSet());
         if (roleNames.isEmpty()) throw new BadRequestExc("No valid role names provided");
         else if (roleNames.size() > 100) throw new BadRequestExc("Cannot delete more than 100 roles at a time");
         return adminUserService.deleteRoles(roleNames);
@@ -164,7 +155,6 @@ public class AdminUserController {
     @GetMapping("/get-roles")
     @PreAuthorize("@authz.isAdminOrAbove() or @authz.canReadRoles()")
     public ResponseEntity<?> getRoles(@RequestBody Set<String> roleNames) {
-        roleNames = roleNames.stream().filter(r -> r != null && !r.isBlank()).collect(Collectors.toSet());
         if (roleNames.isEmpty()) throw new BadRequestExc("No valid role names provided");
         else if (roleNames.size() > 100) throw new BadRequestExc("Cannot get more than 100 roles at a time");
         return adminUserService.getRoles(roleNames);
@@ -179,7 +169,6 @@ public class AdminUserController {
     @PutMapping("/update-roles")
     @PreAuthorize("@authz.isAdminOrAbove() or @authz.canUpdateRoles()")
     public ResponseEntity<?> updateRoles(@RequestBody Set<RoleCreationDto> roles) {
-        roles = roles.stream().filter(Objects::nonNull).collect(Collectors.toSet());
         if (roles.isEmpty()) throw new BadRequestExc("No valid roles provided");
         else if (roles.size() > 100) throw new BadRequestExc("Cannot update more than 100 roles at a time");
         return adminUserService.updateRoles(roles);
@@ -245,7 +234,6 @@ public class AdminUserController {
     @PostMapping("/create-users-lenient")
     @PreAuthorize("@authz.isAdminOrAbove() or @authz.canCreateUsers()")
     public ResponseEntity<?> createUsersLenient(@RequestBody Set<UserCreationDto> requests) {
-        requests = requests.stream().filter(Objects::nonNull).collect(Collectors.toSet());
         if (requests.isEmpty()) throw new BadRequestExc("No valid requests provided");
         else if (requests.size() > 100) throw new BadRequestExc("Cannot create more than 100 users at a time");
         return ResponseEntity.ok(adminUserService.createUsersLenient(requests));
@@ -254,7 +242,6 @@ public class AdminUserController {
     @DeleteMapping("/delete-users-lenient")
     @PreAuthorize("@authz.isAdminOrAbove() or @authz.canDeleteUsers()")
     public ResponseEntity<?> deleteUsersLenient(@RequestBody Set<String> usernamesOrEmails) {
-        usernamesOrEmails = usernamesOrEmails.stream().filter(use -> use != null && !use.isBlank()).collect(Collectors.toSet());
         if (usernamesOrEmails.isEmpty()) throw new BadRequestExc("No valid usernames or emails provided");
         else if (usernamesOrEmails.size() > 100) throw new BadRequestExc("Cannot delete more than 100 users at a time");
         return ResponseEntity.ok(adminUserService.deleteUsersLenient(usernamesOrEmails));
@@ -263,7 +250,6 @@ public class AdminUserController {
     @GetMapping("/get-users-lenient")
     @PreAuthorize("@authz.isAdminOrAbove() or @authz.canReadUsers()")
     public ResponseEntity<?> getUsersLenient(@RequestBody Set<String> usernamesOrEmails) {
-        usernamesOrEmails = usernamesOrEmails.stream().filter(use -> use != null && !use.isBlank()).collect(Collectors.toSet());
         if (usernamesOrEmails.isEmpty()) throw new BadRequestExc("No valid usernames or emails provided");
         else if (usernamesOrEmails.size() > 100) throw new BadRequestExc("Cannot get more than 100 users at a time");
         return ResponseEntity.ok(adminUserService.getUsersLenient(usernamesOrEmails));
@@ -272,7 +258,6 @@ public class AdminUserController {
     @PutMapping("/update-users-lenient")
     @PreAuthorize("@authz.isAdminOrAbove() or @authz.canUpdateUsers()")
     public ResponseEntity<?> updateUsersLenient(@RequestBody Set<UserUpdationDto> requests) {
-        requests = requests.stream().filter(Objects::nonNull).collect(Collectors.toSet());
         if (requests.isEmpty()) throw new BadRequestExc("No valid requests provided");
         else if (requests.size() > 100) throw new BadRequestExc("Cannot update more than 100 users at a time");
         return ResponseEntity.ok(adminUserService.updateUsersLenient(requests));
@@ -281,7 +266,6 @@ public class AdminUserController {
     @PostMapping("/create-roles-lenient")
     @PreAuthorize("@authz.isAdminOrAbove() or @authz.canCreateRoles()")
     public ResponseEntity<?> createRolesLenient(@RequestBody Set<RoleCreationDto> roles) {
-        roles = roles.stream().filter(Objects::nonNull).collect(Collectors.toSet());
         if (roles.isEmpty()) throw new BadRequestExc("No valid roles provided");
         else if (roles.size() > 100) throw new BadRequestExc("Cannot create more than 100 roles at a time");
         return ResponseEntity.ok(adminUserService.createRolesLenient(roles));
@@ -290,7 +274,6 @@ public class AdminUserController {
     @DeleteMapping("/delete-roles-lenient")
     @PreAuthorize("@authz.isAdminOrAbove() or @authz.canDeleteRoles()")
     public ResponseEntity<?> deleteRolesLenient(@RequestBody Set<String> roleNames) {
-        roleNames = roleNames.stream().filter(r -> r != null && !r.isBlank()).collect(Collectors.toSet());
         if (roleNames.isEmpty()) throw new BadRequestExc("No valid role names provided");
         else if (roleNames.size() > 100) throw new BadRequestExc("Cannot delete more than 100 roles at a time");
         return ResponseEntity.ok(adminUserService.deleteRolesLenient(roleNames));
@@ -299,7 +282,6 @@ public class AdminUserController {
     @GetMapping("/get-roles-lenient")
     @PreAuthorize("@authz.isAdminOrAbove() or @authz.canReadRoles()")
     public ResponseEntity<?> getRolesLenient(@RequestBody Set<String> roleNames) {
-        roleNames = roleNames.stream().filter(r -> r != null && !r.isBlank()).collect(Collectors.toSet());
         if (roleNames.isEmpty()) throw new BadRequestExc("No valid role names provided");
         else if (roleNames.size() > 100) throw new BadRequestExc("Cannot get more than 100 roles at a time");
         return ResponseEntity.ok(adminUserService.getRolesLenient(roleNames));
@@ -308,7 +290,6 @@ public class AdminUserController {
     @PutMapping("/update-roles-lenient")
     @PreAuthorize("@authz.isAdminOrAbove() or @authz.canUpdateRoles()")
     public ResponseEntity<?> updateRolesLenient(@RequestBody Set<RoleCreationDto> roles) {
-        roles = roles.stream().filter(Objects::nonNull).collect(Collectors.toSet());
         if (roles.isEmpty()) throw new BadRequestExc("No valid roles provided");
         else if (roles.size() > 100) throw new BadRequestExc("Cannot update more than 100 roles at a time");
         return ResponseEntity.ok(adminUserService.updateRolesLenient(roles));
@@ -317,7 +298,6 @@ public class AdminUserController {
     @GetMapping("/get-permissions-lenient")
     @PreAuthorize("@authz.isAdminOrAbove() or @authz.canReadPermissions()")
     public ResponseEntity<?> getPermissionsLenient(@RequestBody Set<String> permissionNames) {
-        permissionNames = permissionNames.stream().filter(p -> p != null && !p.isBlank()).collect(Collectors.toSet());
         if (permissionNames.isEmpty()) throw new BadRequestExc("No valid permission names provided");
         else if (permissionNames.size() > 100)
             throw new BadRequestExc("Cannot get more than 100 permissions at a time");
