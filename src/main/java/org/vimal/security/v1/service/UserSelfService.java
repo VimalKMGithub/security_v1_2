@@ -50,6 +50,7 @@ public class UserSelfService {
     private final EmailStoreForEmailChange2EncDec emailStoreForEmailChange2EncDec;
     private final EmailOtpToDeleteAccountEncDec emailOtpToDeleteAccountEncDec;
     private final EmailOtpToDeleteAccount2EncDec emailOtpToDeleteAccount2EncDec;
+    private final AuthAppSecretConverter authAppSecretConverter;
     private final JwtUtil jwtUtil;
 
     public ResponseEntity<?> register(UserRegistrationDto registrationDto) {
@@ -321,7 +322,8 @@ public class UserSelfService {
         if (user.getEmail().equalsIgnoreCase(email))
             throw new BadRequestExc("New email: '" + email + "' is same as current email: '" + user.getEmail() + "'");
         var realEmail = RealEmailSanitizerUtil.sanitizeRealEmail(email);
-        if (userModelRepo.existsByRealEmail(realEmail)) throw new BadRequestExc("Email: '" + email + "' already taken");
+        if (userModelRepo.existsByRealEmail(realEmail) || userModelRepo.existsByEmail(email))
+            throw new BadRequestExc("Email: '" + email + "' already taken");
         var otp = generateAndStoreEmailOtpForEmailChange(user);
         storeEmail(user, email);
         mailService.sendOtpAsync(email, "Otp for email change verification", otp);
@@ -464,7 +466,8 @@ public class UserSelfService {
         if (!user.hasMfaEnabled(UserModel.MfaType.AUTHENTICATOR_APP))
             throw new BadRequestExc("Authenticator App Mfa is not enabled");
         user = userModelRepo.findById(user.getId()).orElseThrow(() -> new BadRequestExc("User not found"));
-        if (!TOTPUtil.verifyOTP(user.getAuthAppSecret(), totp)) throw new BadRequestExc("Invalid TOTP");
+        if (!TOTPUtil.verifyOTP(authAppSecretConverter.convertToEntityAttribute(user.getAuthAppSecret()), totp))
+            throw new BadRequestExc("Invalid TOTP");
         if (!passwordEncoder.matches(password, user.getPassword())) throw new BadRequestExc("Invalid password");
         jwtUtil.revokeAccessToken(user);
         jwtUtil.revokeRefreshTokenByUser(user);
